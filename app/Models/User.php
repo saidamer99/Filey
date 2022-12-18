@@ -8,6 +8,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @method static create(array $array)
+ * @method static where(string $string, mixed $email)
+ * @method static whereNotIn(string $string)
+ * @property mixed $id
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -30,15 +36,26 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+
+
+    public function groupOwner(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Group::class,"owner_id",'id')->orderBy("created_at","DESC");
+    }
+    public function groupMember(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return$this->belongsToMany(Group::class,'group_users','user_id','group_id')->orderBy("created_at","DESC");
+    }
+
+    public function files(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(File::class,'owner_id','id');
+    }
+    public function modifiedFiles($group_id): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(File::class,'current_editor_id','id')->where('group_id',$group_id);
+    }
+
 }

@@ -63,5 +63,14 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'log' => \App\Http\Middleware\ShouldLog::class,
+        'group-owner' => \App\Http\Middleware\GroupOwner::class,
+        'file-owner' => \App\Http\Middleware\FileOwner::class,
+        'can-delete-user' => \App\Http\Middleware\DeleteUser::class,
+        'can-delete-group' => \App\Http\Middleware\DeleteGroup::class,
+        'can-delete-file' => \App\Http\Middleware\DeleteFile::class,
+        'can-check-file' => \App\Http\Middleware\CheckFile::class,
+        'can-checkout-file' => \App\Http\Middleware\CheckOutFile::class,
+        'group-member' => \App\Http\Middleware\GroupMember::class,
     ];
 }
